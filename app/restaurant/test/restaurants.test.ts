@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 
-import { Restaurants } from "../app/restaurants";
+import { Restaurants } from "../restaurants";
 
 const restaurantDataFile = "./restaurant_data.json";
 
@@ -24,9 +24,9 @@ describe("Restaurants class", function () {
   });
 
   it("reports only the Kayasa Restaurant open on Monday at 8:30 am", () => {
-    expect(
-      getRestaurantsOpenAt({ weekday: 0, hour: 8, minute: 30 })
-    ).toEqual(["Kayasa Restaurant"]);
+    expect(getRestaurantsOpenAt({ weekday: 0, hour: 8, minute: 30 })).toEqual([
+      "Kayasa Restaurant",
+    ]);
   });
 
   // TODO
