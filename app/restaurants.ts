@@ -1,5 +1,5 @@
-const fs = require("fs");
-const luxon = require("luxon");
+import { readFileSync } from "fs";
+import luxon from "luxon";
 
 /**
  * This class takes the name of a JSON file containing details on opening hours
@@ -10,9 +10,9 @@ const luxon = require("luxon");
  *
  * All dates and times can be assumed to be in the same time zone.
  */
-class Restaurants {
+export class Restaurants {
   constructor(jsonFilename) {
-    const jsonData = JSON.parse(fs.readFileSync(jsonFilename));
+    const jsonData = JSON.parse(readFileSync(jsonFilename).toString());
 
     // TODO
   }
@@ -30,5 +30,3 @@ class Restaurants {
     return [];
   }
 }
-
-module.exports = Restaurants;

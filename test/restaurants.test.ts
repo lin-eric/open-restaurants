@@ -1,7 +1,6 @@
-const expect = require("chai").expect;
-const luxon = require("luxon");
+import { DateTime } from "luxon";
 
-const Restaurants = require("../app/restaurants.js");
+import { Restaurants } from "../app/restaurants";
 
 const restaurantDataFile = "./restaurant_data.json";
 
@@ -16,18 +15,18 @@ describe("Restaurants class", function () {
   // at a given time. Monday is weekday === 0, and Sunday is weekday === 6.
   const getRestaurantsOpenAt = ({ weekday, hour, minute = 0 }) => {
     return restaurants.getRestaurantsOpenAt(
-      luxon.DateTime.local(2021, 5, 10 + weekday, hour, minute)
+      DateTime.local(2021, 5, 10 + weekday, hour, minute)
     );
   };
 
   it("reports no open restaurants at 5am on Sundays", () => {
-    expect(getRestaurantsOpenAt({ weekday: 6, hour: 5 })).to.deep.equal([]);
+    expect(getRestaurantsOpenAt({ weekday: 6, hour: 5 })).toEqual([]);
   });
 
   it("reports only the Kayasa Restaurant open on Monday at 8:30 am", () => {
     expect(
       getRestaurantsOpenAt({ weekday: 0, hour: 8, minute: 30 })
-    ).to.deep.equal(["Kayasa Restaurant"]);
+    ).toEqual(["Kayasa Restaurant"]);
   });
 
   // TODO
