@@ -36,7 +36,7 @@ export class Restaurants {
   /**
    * Finds the restaurants open at the specified time.
    *
-   * @param {DateTime} time
+   * @param {DateTime} time - DateTime input
    * @returns {Array<string>} The names of the restaurants open at the specified
    * time. The order of the elements in this array is alphabetical.
    */
@@ -51,8 +51,8 @@ export class Restaurants {
    * for the weekdays (Monday = 0, Sunday = 6), whereas Luxon's DateTime is
    * 1-based
    *
-   * @param {DateTime} input
-   * @returns {number}
+   * @param {DateTime} input - DateTime to convert
+   * @returns {number} - Input as seconds
    */
   protected getInputAsSeconds(input: DateTime) {
     const { weekday, hour, minute } = input;
@@ -68,8 +68,8 @@ export class Restaurants {
    * Gets the name of restaurants that have an opening interval that has a range
    * that overlaps the input time.
    *
-   * @param {number} input
-   * @returns {Array<string>}
+   * @param {number} input - time in seconds
+   * @returns {Array<string>} - list of restaurants that overlap the input time
    */
   protected getIntersections(input: number) {
     const restaurants = [];

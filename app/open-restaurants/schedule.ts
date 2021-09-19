@@ -82,8 +82,8 @@ export class Schedule {
    * Sets up the schedule for all restaurants with the raw time data normalised
    * to time in seconds.
    *
-   * @param {RestaurantScheduleData} rawData
-   * @return {IntervalList}
+   * @param {RestaurantScheduleData} rawData - Raw JSON data loaded in
+   * @return {IntervalList} - List of intervals for all restaurants
    */
   protected getFormattedSchedule(
     rawData: RestaurantScheduleData,
@@ -103,8 +103,8 @@ export class Schedule {
    * This method converts the opening hours string from the raw JSON data into
    * a list of intervals with each start and end time in seconds.
    *
-   * @param rawOpeningHours
-   * @return {Array<Interval>}
+   * @param rawOpeningHours - Opening hours string in the raw JSON input
+   * @return {Array<Interval>} - Array of intervals converted from the string
    */
   protected getNormalisedIntervals(rawOpeningHours: string): Interval[] {
     const rawIntervals = rawOpeningHours.split('; ');

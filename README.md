@@ -43,21 +43,18 @@ The two parts have been separated into two main classes:
 This solution was chosen due to the ease of implementation where we simply need to go through each restaurant in the list and identify whether or not each opening time has an intersection with the input time. It also has the added benefit of being easy to consume due to the structure of the data being grouped by intervals for each restaurant so it can be easily re-used for another feature such as finding the opening times for one specific restaurant.
 However, this solution scales poorly, as the time it takes to go through the list scales linearly with the number of opening times.
 
-There are a number of changes that could be done to improve the processing time for this application. For the application as it is now, it could be changed to return early as soon as any matching interval is found for the restaurant as we don't need to know which interval it is, only that there is one that exists. As th application is now, it does an inefficient full scan of each entry.
+There are a number of changes that could be done to improve the processing time for this application. For the application as it is now, it could be changed to return early as soon as any matching interval is found for the restaurant as we don't need to know which interval it is, only that there is one that exists. The problem with this solution is that it does an inefficient full scan of all intervals for.
 
 ### Alternative Solution
 One potential approach for larger data sets could be to update the data structure from:
 ```
-// Current
 {
   name: string;
-  intervals: [
-    {
-      start: numnber;
-      end: number;
-    }[]
-  ]
-}
+  intervals: {
+    start: number;
+    end: number;
+  }[]
+}[]
 ```
 to
 ```
@@ -65,7 +62,7 @@ to
   name: string;
   start: number,
   end: number
-}
+}[]
 ```
 Instead of grouping each interval with each restaurant, the intervals would be flattened to have a long list of all available intervals. This could then be used to create two sorted lists based around the average of all intervals (Here, I am making the assumption that the middle point is 12:00 pm):.
 * one set of intervals where the opening times is sorted by start time ascending up until 11:59 am where the rest of the intervals with a start time after 11:59am are removed from the list
@@ -74,10 +71,9 @@ Instead of grouping each interval with each restaurant, the intervals would be f
 If the input time decided by the user is between 12am - 11:59am, we use the start time ascending tree, and end time descending otherwise.
 
 To go through the time ascending scenario:
-Given a point in time (t), we can eliminate all intervals that have an end time before t. With the remaining set of intervals, we could then sort it by end time descending and eliminate all start times after t. What is left over would be all intervals that intersect point t.
+Given a point in time `t`, we can eliminate all intervals that have an end time before `t`. With the remaining set of intervals, we could then sort it by end time descending and eliminate all start times after `t`. What is left over would be all intervals that intersect point `t`.
 
-This approach has the added downside of being very specific to this functionality as the data structure isn't as easy to consume due to there being no groupings.
+One downside to this approach is that it is made to be specific to this functionality as the data structure isn't easy to consume due to there being no groupings.
 
 # Feedback
-I would love to be able to get feedback on the Alternative Solution and how it could be improved further, or if there is a better approach that could be done!
-Also, although the 
+I would love to be able to get feedback on the Alternative Solution and how it could be improved further, or if there is a better approach that could be used instead!
