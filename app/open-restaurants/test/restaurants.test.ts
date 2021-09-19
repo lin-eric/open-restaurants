@@ -49,7 +49,7 @@ describe('Restaurants class', function () {
     ).toEqual([]);
   });
 
-  // Heavy checking of World's Best Steakhouse due to end times at and after 
+  // Heavy checking of World's Best Steakhouse due to end times at and after
   // 12am requiring an extra step to ensure that those times don't get treated
   // as being before the start time.
   it('reports that WBS is open just before closing time 1am', () => {

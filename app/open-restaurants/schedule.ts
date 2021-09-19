@@ -58,7 +58,8 @@ export class Schedule {
 
   /**
    * Constructor - This sets up the data json data required for processing
-   * restaurant opening times, followed by converting the time into
+   * restaurant opening times, followed by converting those times into
+   * start and end seconds in a week.
    *
    * @param jsonFileName
    */
@@ -133,7 +134,7 @@ export class Schedule {
       const startDayIndex = DAY_MAP[startDay];
       const endDayIndex = DAY_MAP[endDay];
 
-      this.getIntervalsBetweenDays(
+      this.createIntervals(
         startDayIndex,
         endDayIndex,
         startTime,
@@ -147,9 +148,9 @@ export class Schedule {
   }
 
   /**
-   * Gets the intervals between two 0-indexed days in a week
-   * 0 = Monday
-   * 6 = Sunday
+   * Gets the intervals between two 0-indexed days in a week and generates
+   * intervals between them (inclusive) based on the input start and end time in
+   * seconds.
    *
    * @param {number} startDay - Index for start interval day in the week (0 - 6)
    * @param {number} endDay - Index for end interval day in the week (0 - 6)
@@ -158,7 +159,7 @@ export class Schedule {
    *
    * @returns {Array<Interval>}
    */
-  protected getIntervalsBetweenDays(
+  protected createIntervals(
     startDay: number,
     endDay: number,
     startTime: number,

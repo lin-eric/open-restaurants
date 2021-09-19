@@ -41,9 +41,6 @@ export class Restaurants {
    * time. The order of the elements in this array is alphabetical.
    */
   public getRestaurantsOpenAt(input: DateTime) {
-    // Get the input in seconds. Please note that this application is 0-based
-    // for the weekdays (Monday = 0, Sunday = 6), whereas Luxon's DateTime is
-    // 1-based.
     const seconds = this.getInputAsSeconds(input);
 
     return this.getIntersections(seconds);
