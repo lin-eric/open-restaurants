@@ -3,7 +3,7 @@ import {
   MINUTE_IN_SECONDS,
   PM,
   PM_OFFSET_SECONDS,
-} from "../../constants/datetime";
+} from '../../constants/datetime';
 
 /**
  * Converts 12 hour time to seconds
@@ -12,11 +12,11 @@ import {
  * @returns {int} time in seconds
  */
 export const convert12HourTimeToSeconds = (timeString: string) => {
-  const timeParts = timeString.split(" "); // eg. ['12:34', 'am]
+  const timeParts = timeString.split(' '); // eg. ['12:34', 'am]
   const time = timeParts[0]; // eg. 12:34
   const meridiem = timeParts[1]; // eg. am
 
-  const timeSplit = time.split(":").map((item) => parseInt(item));
+  const timeSplit = time.split(':').map((item) => parseInt(item));
 
   if (!timeSplit.length) {
     return 0;

@@ -23,5 +23,5 @@ export const PM_OFFSET_SECONDS = HOUR_IN_SECONDS * 12;
 /**
  *  Meridiem format used by this application
  */
-export const PM = "pm";
-export const AM = "am";
+export const PM = 'pm';
+export const AM = 'am';

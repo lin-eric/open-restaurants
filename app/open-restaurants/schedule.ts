@@ -1,12 +1,12 @@
-import fs, { PathOrFileDescriptor } from "fs";
+import fs, { PathOrFileDescriptor } from 'fs';
 import {
   DAY_MAP,
   DAY_IN_SECONDS,
   WEEK_IN_SECONDS,
   MINUTE_IN_SECONDS,
-} from "../constants/datetime";
+} from '../constants/datetime';
 
-import { convert12HourTimeToSeconds } from "./utils/time";
+import { convert12HourTimeToSeconds } from './utils/time';
 
 /**
  * Format for a single interval for a restaurant, where start and end is
@@ -56,7 +56,7 @@ export class Schedule {
    */
   public constructor(jsonFileName: PathOrFileDescriptor) {
     this.intervalList = this.getFormattedSchedule(
-      JSON.parse(fs.readFileSync(jsonFileName).toString())
+      JSON.parse(fs.readFileSync(jsonFileName).toString()),
     );
   }
 
@@ -96,7 +96,7 @@ export class Schedule {
    * @return {Array<Interval>}
    */
   protected getFormattedIntervals(rawOpeningHours: string) {
-    const rawIntervals = rawOpeningHours.split("; ");
+    const rawIntervals = rawOpeningHours.split('; ');
 
     const intervals = [];
     rawIntervals.forEach((item) => {

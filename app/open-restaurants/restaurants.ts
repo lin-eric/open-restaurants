@@ -1,11 +1,11 @@
-import { PathOrFileDescriptor } from "fs";
-import { DateTime } from "luxon";
+import { PathOrFileDescriptor } from 'fs';
+import { DateTime } from 'luxon';
 import {
   DAY_IN_SECONDS,
   HOUR_IN_SECONDS,
   MINUTE_IN_SECONDS,
-} from "../constants/datetime";
-import { Schedule } from "./schedule";
+} from '../constants/datetime';
+import { Schedule } from './schedule';
 
 /**
  * This class takes the name of a JSON file containing details on opening hours
