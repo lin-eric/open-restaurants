@@ -84,7 +84,7 @@ If the input time decided by the user is between 12am - 11:59am, we use the star
 To go through the time ascending scenario:
 Given a point in time `t`, we can eliminate all intervals that have an end time before `t`. With the remaining set of intervals, we could then sort it by end time descending and eliminate all start times after `t`. What is left over would be all intervals that intersect point `t`.
 
-One downside to this approach is that it is made to be specific to this functionality as the data structure isn't easy to consume due to there being no groupings. Another problem is the double-handling of the sorting which might not be very efficient. Finally, the ideal scenario would be to have separate, exclusive lists to narrow down the initial search numbers further, but instead we have overlap between the two lists for any points that have a start and end that overlap `t` which would be the majority of the intervals.
+One downside to this approach is that it is made to be specific to this functionality as the data structure isn't easy to consume due to there being no groupings. Another problem is the double-handling of the sorting which does not seem very efficient. Finally, the ideal scenario would be to have separate, exclusive lists to narrow down the initial search numbers further, but instead we have overlap between the two lists for any points that have a start and end that overlap `t` which would be the majority of the intervals.
 
 # Feedback
 I would love to be able to get feedback on the Alternative Solution and how it could be improved further, or if there is a better approach that could be used instead!
