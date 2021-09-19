@@ -1,5 +1,10 @@
 import fs, { PathOrFileDescriptor } from "fs";
-import { DAY_MAP, DAY_IN_SECONDS } from "../constants/datetime";
+import {
+  DAY_MAP,
+  DAY_IN_SECONDS,
+  WEEK_IN_SECONDS,
+  MINUTE_IN_SECONDS,
+} from "../constants/datetime";
 
 import { convert12HourTimeToSeconds } from "./utils/time";
 
@@ -41,7 +46,7 @@ export class Schedule {
    *
    * @type {IntervalList}
    */
-	protected intervalList: IntervalList;
+  protected intervalList: IntervalList;
 
   /**
    * Constructor - This sets up the data json data required for processing
@@ -124,6 +129,25 @@ export class Schedule {
 
         const startInterval = startTime + dayOffset;
         let endInterval = endTime + dayOffset;
+
+        if (endInterval - MINUTE_IN_SECONDS < startInterval) {
+          // If end time is before start time, this means that this interval
+          // flows over past this day over to the next.
+          endInterval += DAY_IN_SECONDS;
+        }
+
+        // If there is an overlap between Sunday and Monday, we need to detach
+        // the overlap period to be a part of the Monday range instead.
+        if (endInterval > WEEK_IN_SECONDS) {
+          // Monday interval
+          intervals.push({
+            start: 0,
+            end: endInterval - WEEK_IN_SECONDS,
+          });
+
+          // Set the end Interval time for Sunday to 11:59:59 pm
+          endInterval = WEEK_IN_SECONDS - 1;
+        }
 
         intervals.push({
           start: startInterval,

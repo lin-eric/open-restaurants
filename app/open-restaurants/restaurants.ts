@@ -58,10 +58,12 @@ export class Restaurants {
    * @returns {number}
    */
   protected getInputAsSeconds(input: DateTime) {
+    const { weekday, hour, minute } = input;
+
     return (
-      (input.weekday - 1) * DAY_IN_SECONDS +
-      input.hour * HOUR_IN_SECONDS +
-      input.minute * MINUTE_IN_SECONDS
+      (weekday - 1) * DAY_IN_SECONDS +
+      hour * HOUR_IN_SECONDS +
+      minute * MINUTE_IN_SECONDS
     );
   }
 
