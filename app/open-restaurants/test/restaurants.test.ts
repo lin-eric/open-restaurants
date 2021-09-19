@@ -49,9 +49,9 @@ describe('Restaurants class', function () {
     ).toEqual([]);
   });
 
-  // Heavy checking of World's Best Steakhouse due to times after 12am resulting
-  // in funky behaviour where the overlap causes end time to be before start
-  // time
+  // Heavy checking of World's Best Steakhouse due to end times at and after 
+  // 12am requiring an extra step to ensure that those times don't get treated
+  // as being before the start time.
   it('reports that WBS is open just before closing time 1am', () => {
     expect(getRestaurantsOpenAt({ weekday: 6, hour: 0, minute: 59 })).toEqual([
       "World's Best Steakhouse",
@@ -75,5 +75,34 @@ describe('Restaurants class', function () {
     expect(getRestaurantsOpenAt({ weekday: 6, hour: 0, minute: 1 })).toEqual([
       "World's Best Steakhouse",
     ]);
+  });
+
+  it('reports that on Saturday at noon, every restaurant is open', () => {
+    expect(getRestaurantsOpenAt({ weekday: 5, hour: 12 })).toEqual([
+      'Kayasa Restaurant',
+      'The Golden Duck',
+      "World's Best Steakhouse",
+      'Tandoori Mahal',
+      'Coffee and Bagels',
+    ]);
+  });
+
+  it('reports that Tandoori Mahal is open Monday to Friday at 11am', () => {
+    // Monday to Friday 11am is open
+    for (let i = 0; i < 5; i++) {
+      expect(
+        getRestaurantsOpenAt({ weekday: i, hour: 11 }).filter(
+          (item) => item === 'Tandoori Mahal',
+        ),
+      ).toEqual(['Tandoori Mahal']);
+    }
+    // Saturday and Sunday 11am is closed
+    [5, 6].forEach((i) => {
+      expect(
+        getRestaurantsOpenAt({ weekday: i, hour: 11 }).filter(
+          (item) => item === 'Tandoori Mahal',
+        ),
+      ).toEqual([]);
+    });
   });
 });
