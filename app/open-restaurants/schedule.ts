@@ -1,12 +1,12 @@
 import fs, { PathOrFileDescriptor } from 'fs';
+import { convert12HourTimeToSeconds } from '../utils/time';
+
 import {
   DAY_MAP,
   DAY_IN_SECONDS,
-  WEEK_IN_SECONDS,
   MINUTE_IN_SECONDS,
+  WEEK_IN_SECONDS,
 } from '../constants/datetime';
-
-import { convert12HourTimeToSeconds } from './utils/time';
 
 /**
  * Format for a single interval for a restaurant, where start and end is
@@ -40,6 +40,14 @@ type RestaurantScheduleData = {
   restaurants: RestaurantScheduleEntry[];
 };
 
+/**
+ * This class takes the name of a JSON file containing restaurants and their
+ * opening times, parses it, and normalises the times into start and end
+ * intervals in seconds.
+ *
+ * All times are assumed to be in the same timezone. The JSON data is also
+ * assumed to be in a consistent and valid format.
+ */
 export class Schedule {
   /**
    * Holds the normalised schedule for each restaurant
@@ -70,16 +78,18 @@ export class Schedule {
   }
 
   /**
-   * Sets up the schedule for all restaurants with the raw time data converted
-   * to a range of times
+   * Sets up the schedule for all restaurants with the raw time data normalised
+   * to time in seconds.
    *
    * @param {RestaurantScheduleData} rawData
    * @return {IntervalList}
    */
-  protected getFormattedSchedule(rawData: RestaurantScheduleData) {
+  protected getFormattedSchedule(
+    rawData: RestaurantScheduleData,
+  ): IntervalList {
     return rawData.restaurants.map((item) => {
       const { name, opening_hours } = item;
-      const intervals = this.getFormattedIntervals(opening_hours);
+      const intervals = this.getNormalisedIntervals(opening_hours);
 
       return {
         name,
@@ -95,7 +105,7 @@ export class Schedule {
    * @param rawOpeningHours
    * @return {Array<Interval>}
    */
-  protected getFormattedIntervals(rawOpeningHours: string) {
+  protected getNormalisedIntervals(rawOpeningHours: string): Interval[] {
     const rawIntervals = rawOpeningHours.split('; ');
 
     const intervals = [];
@@ -123,38 +133,69 @@ export class Schedule {
       const startDayIndex = DAY_MAP[startDay];
       const endDayIndex = DAY_MAP[endDay];
 
-      // Generate intervals for days between start and end day inclusive
-      for (let i = startDayIndex; i <= endDayIndex; i++) {
-        const dayOffset = i * DAY_IN_SECONDS;
-
-        const startInterval = startTime + dayOffset;
-        let endInterval = endTime + dayOffset;
-
-        if (endInterval - MINUTE_IN_SECONDS < startInterval) {
-          // If end time is before start time, this means that this interval
-          // flows over past this day over to the next.
-          endInterval += DAY_IN_SECONDS;
-        }
-
-        // If there is an overlap between Sunday and Monday, we need to detach
-        // the overlap period to be a part of the Monday range instead.
-        if (endInterval > WEEK_IN_SECONDS) {
-          // Monday interval
-          intervals.push({
-            start: 0,
-            end: endInterval - WEEK_IN_SECONDS,
-          });
-
-          // Set the end Interval time for Sunday to 11:59:59 pm
-          endInterval = WEEK_IN_SECONDS - 1;
-        }
-
-        intervals.push({
-          start: startInterval,
-          end: endInterval,
-        });
-      }
+      this.getIntervalsBetweenDays(
+        startDayIndex,
+        endDayIndex,
+        startTime,
+        endTime,
+      ).forEach((interval) => {
+        intervals.push(interval);
+      });
     });
+
+    return intervals;
+  }
+
+  /**
+   * Gets the intervals between two 0-indexed days in a week
+   * 0 = Monday
+   * 6 = Sunday
+   *
+   * @param {number} startDay - Index for start interval day in the week (0 - 6)
+   * @param {number} endDay - Index for end interval day in the week (0 - 6)
+   * @param {number} startTime - Start time in seconds
+   * @param {number} endTime - End time in seconds
+   *
+   * @returns {Array<Interval>}
+   */
+  protected getIntervalsBetweenDays(
+    startDay: number,
+    endDay: number,
+    startTime: number,
+    endTime: number,
+  ): Interval[] {
+    const intervals = [];
+    // Generate intervals for days between start and end day inclusive
+    for (let i = startDay; i <= endDay; i++) {
+      const dayOffset = i * DAY_IN_SECONDS;
+
+      const startInterval = startTime + dayOffset;
+      let endInterval = endTime + dayOffset;
+
+      if (endInterval - MINUTE_IN_SECONDS < startInterval) {
+        // If end time is before start time, this means that this interval
+        // flows over past this day over to the next.
+        endInterval += DAY_IN_SECONDS;
+      }
+
+      // If there is an overlap between Sunday and Monday, we need to detach
+      // the overlap period to be a part of the Monday range instead.
+      if (endInterval > WEEK_IN_SECONDS) {
+        // Monday interval
+        intervals.push({
+          start: 0,
+          end: endInterval - WEEK_IN_SECONDS,
+        });
+
+        // Set the end Interval time for Sunday to 11:59:59 pm
+        endInterval = WEEK_IN_SECONDS - 1;
+      }
+
+      intervals.push({
+        start: startInterval,
+        end: endInterval,
+      });
+    }
 
     return intervals;
   }

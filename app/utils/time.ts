@@ -3,7 +3,7 @@ import {
   MINUTE_IN_SECONDS,
   PM,
   PM_OFFSET_SECONDS,
-} from '../../constants/datetime';
+} from '../constants/datetime';
 
 /**
  * Converts 12 hour time to seconds
