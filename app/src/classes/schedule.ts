@@ -166,9 +166,10 @@ export class Schedule {
     endTime: number,
   ): Interval[] {
     const intervals = [];
-    // Generate intervals for days between start and end day inclusive
-    for (let i = startDay; i <= endDay; i++) {
-      const dayOffset = i * DAY_IN_SECONDS;
+    let currentDay = startDay;
+
+    while (true) {
+      const dayOffset = currentDay * DAY_IN_SECONDS;
 
       const startInterval = startTime + dayOffset;
       let endInterval = endTime + dayOffset;
@@ -179,23 +180,28 @@ export class Schedule {
         endInterval += DAY_IN_SECONDS;
       }
 
-      // If there is an overlap between Sunday and Monday, we need to detach
-      // the overlap period to be a part of the Monday range instead.
       if (endInterval > WEEK_IN_SECONDS) {
-        // Monday interval
+        // If the interval has moved past one week, adjust it back by a week to
+        // keep it within the one week window.
         intervals.push({
-          start: 0,
+          start: startInterval - WEEK_IN_SECONDS,
           end: endInterval - WEEK_IN_SECONDS,
         });
-
-        // Set the end Interval time for Sunday to 11:59:59 pm
-        endInterval = WEEK_IN_SECONDS - 1;
+      } else {
+        // Interval is within a one week period
+        intervals.push({
+          start: startInterval,
+          end: endInterval,
+        });
       }
 
-      intervals.push({
-        start: startInterval,
-        end: endInterval,
-      });
+      if (currentDay === endDay) {
+        // All intervals accounted for!
+        break;
+      }
+      
+      // Move the pointed day back to Monday if it's currently Sunday. 
+      currentDay = (currentDay + 1) % 7;
     }
 
     return intervals;
