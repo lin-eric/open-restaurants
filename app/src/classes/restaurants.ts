@@ -72,13 +72,12 @@ export class Restaurants {
    * @returns {Array<string>} - list of restaurants that overlap the input time
    */
   protected getIntersections(input: number) {
-    return this.schedule.getIntervalList()
-      .reduce((accumulator, item) => {
-        return item.intervals.some((interval) => {
-          return input >= interval.start && input < interval.end;
-        })
-          ? accumulator.concat(item.name)
-          : accumulator;
-      }, []);
+    return this.schedule.getIntervalList().reduce((accumulator, item) => {
+      return item.intervals.some((interval) => {
+        return input >= interval.start && input < interval.end;
+      })
+        ? accumulator.concat(item.name)
+        : accumulator;
+    }, []);
   }
 }

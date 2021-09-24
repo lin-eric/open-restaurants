@@ -88,14 +88,8 @@ describe('Restaurants class', function () {
   });
 
   it('Checking for Overlaps', () => {
-    expect(
-      getRestaurantsOpenAt({ weekday: 0, hour: 2})
-    ).toEqual(['Overlap']);
-    expect(
-      getRestaurantsOpenAt({ weekday: 1, hour: 2})
-    ).toEqual(['Overlap']);
-    expect(
-      getRestaurantsOpenAt({ weekday: 0, hour: 1})
-    ).toEqual([]);
+    expect(getRestaurantsOpenAt({ weekday: 0, hour: 2 })).toEqual(['Overlap']);
+    expect(getRestaurantsOpenAt({ weekday: 1, hour: 2 })).toEqual(['Overlap']);
+    expect(getRestaurantsOpenAt({ weekday: 0, hour: 1 })).toEqual([]);
   });
 });

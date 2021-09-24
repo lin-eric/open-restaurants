@@ -47,11 +47,11 @@ The two parts have been separated into two main classes:
 
 ### Analysis
 
-This solution was chosen due to the ease of implementation where we simply need to go through each restaurant in the list and identify whether or not each opening time has an intersection with the input time. This solution however, scales poorly as the time it takes to go through the list scales linearly with the number of opening times. 
+This solution was chosen due to the ease of implementation where we simply need to go through each restaurant in the list and identify whether or not each opening time has an intersection with the input time. This solution however, scales poorly as the time it takes to go through the list scales linearly with the number of opening times.
 
 Ideally, we would use an interval tree to hold the processed data structure. We can then traverse the tree structure looking only at nodes that have potential child nodes (and so on) that have an overlapping interval, and cancelling going through any nodes that do not.
 
-The data structure would then be updated from: 
+The data structure would then be updated from:
 
 ```
 type IntervalList = {

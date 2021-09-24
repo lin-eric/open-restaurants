@@ -107,40 +107,39 @@ export class Schedule {
    * @return {Array<Interval>} - Array of intervals converted from the string
    */
   protected getNormalisedIntervals(rawOpeningHours: string): Interval[] {
-    return rawOpeningHours.split('; ')
-      .reduce((accumulator, item) => {
-        // This regex matches days in three letter short form.
-        const daysRegEx = /(mon|tue|wed|thu|fri|sat|sun)/g;
-        const days = item.toLowerCase().match(daysRegEx);
+    return rawOpeningHours.split('; ').reduce((accumulator, item) => {
+      // This regex matches days in three letter short form.
+      const daysRegEx = /(mon|tue|wed|thu|fri|sat|sun)/g;
+      const days = item.toLowerCase().match(daysRegEx);
 
-        // This regex matches times in the format: 'hh:ss aaa', 'h:ss aaa' and
-        // 'h aaa'
-        const timeRegEx = /\b((1[0-2]|0?[1-9])(?::[0-5][0-9])? ([ap][m]))/g;
-        const times = item.match(timeRegEx);
+      // This regex matches times in the format: 'hh:ss aaa', 'h:ss aaa' and
+      // 'h aaa'
+      const timeRegEx = /\b((1[0-2]|0?[1-9])(?::[0-5][0-9])? ([ap][m]))/g;
+      const times = item.match(timeRegEx);
 
-        const timeInSeconds = times.map((time) => {
-          return convert12HourTimeToSeconds(time);
-        });
-        const startTime = timeInSeconds[0];
-        const endTime = timeInSeconds[1];
+      const timeInSeconds = times.map((time) => {
+        return convert12HourTimeToSeconds(time);
+      });
+      const startTime = timeInSeconds[0];
+      const endTime = timeInSeconds[1];
 
-        const startDay = days[0];
-        const endDay = days[1] ?? days[0];
+      const startDay = days[0];
+      const endDay = days[1] ?? days[0];
 
-        // Get the 0-based index of the start and end day so we know which
-        // additional intervals to generate between them.
-        const startDayIndex = DAY_MAP[startDay];
-        const endDayIndex = DAY_MAP[endDay];
+      // Get the 0-based index of the start and end day so we know which
+      // additional intervals to generate between them.
+      const startDayIndex = DAY_MAP[startDay];
+      const endDayIndex = DAY_MAP[endDay];
 
-        const intervals = this.createIntervals(
-          startDayIndex,
-          endDayIndex,
-          startTime,
-          endTime,
-        );
+      const intervals = this.createIntervals(
+        startDayIndex,
+        endDayIndex,
+        startTime,
+        endTime,
+      );
 
-        return accumulator.concat(intervals);
-      }, []);
+      return accumulator.concat(intervals);
+    }, []);
   }
 
   /**
@@ -195,8 +194,8 @@ export class Schedule {
         // All intervals accounted for!
         break;
       }
-      
-      // Move the pointed day back to Monday if it's currently Sunday. 
+
+      // Move the pointed day back to Monday if it's currently Sunday.
       currentDay = (currentDay + 1) % 7;
     }
 
