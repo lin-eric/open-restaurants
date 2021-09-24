@@ -19,6 +19,10 @@
     {
       "name": "Coffee and Bagels",
       "opening_hours": "Thu-Sun 11:30 am - 4 pm"
+    },
+    {
+      "name": "Overlap",
+      "opening_hours": "Thu-Tue 2:00 am - 3:00 am"
     }
   ]
 }

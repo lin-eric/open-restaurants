@@ -87,22 +87,15 @@ describe('Restaurants class', function () {
     ]);
   });
 
-  it('reports that Tandoori Mahal is open Monday to Friday at 11am', () => {
-    // Monday to Friday 11am is open
-    for (let i = 0; i < 5; i++) {
-      expect(
-        getRestaurantsOpenAt({ weekday: i, hour: 11 }).filter(
-          (item) => item === 'Tandoori Mahal',
-        ),
-      ).toEqual(['Tandoori Mahal']);
-    }
-    // Saturday and Sunday 11am is closed
-    [5, 6].forEach((i) => {
-      expect(
-        getRestaurantsOpenAt({ weekday: i, hour: 11 }).filter(
-          (item) => item === 'Tandoori Mahal',
-        ),
-      ).toEqual([]);
-    });
+  it('Checking for Overlaps', () => {
+    expect(
+      getRestaurantsOpenAt({ weekday: 0, hour: 2})
+    ).toEqual(['Overlap']);
+    expect(
+      getRestaurantsOpenAt({ weekday: 1, hour: 2})
+    ).toEqual(['Overlap']);
+    expect(
+      getRestaurantsOpenAt({ weekday: 0, hour: 1})
+    ).toEqual([]);
   });
 });
